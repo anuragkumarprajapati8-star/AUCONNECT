@@ -482,56 +482,126 @@ export default function Matches() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {matches.map((match) => (
-            <div
+        // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        //   {matches.map((match) => (
+        //     <div
+        //       key={match.id}
+        //       onClick={() => setSelectedMatch(match)}
+        //       className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1"
+        //     >
+        //       <div className="relative">
+        //         <img
+        //           src={match.photos?.[0] || "https://via.placeholder.com/300"}
+        //           alt={match.username}
+        //           className="w-full h-48 object-cover"
+        //         />
+        //         {unreadCounts[match.id] > 0 && (
+        //           <div className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+        //             {unreadCounts[match.id]}
+        //           </div>
+        //         )}
+        //       </div>
+        //       <div className="p-4">
+        //         <div className="flex justify-between items-center mb-3">
+        //           <h3 className="text-xl font-semibold text-gray-800">
+        //             {match.username}, {match.age}
+        //           </h3>
+        //           <span className="text-green-500 text-sm">● Online</span>
+        //         </div>
+        //         <div className="flex flex-wrap gap-2 mb-3">
+        //           {(match.interests || [])
+        //             .slice(0, 3)
+        //             .map((interest, index) => (
+        //               <span
+        //                 key={index}
+        //                 className="px-2 py-1 bg-pink-100 text-pink-600 rounded-full text-xs"
+        //               >
+        //                 {interest}
+        //               </span>
+        //             ))}
+        //         </div>
+        //         <button
+        //           onClick={(e) => {
+        //             e.stopPropagation();
+        //             setSelectedMatch(match);
+        //           }}
+        //           className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg hover:from-pink-600 hover:to-purple-600 transition flex items-center justify-center space-x-2"
+        //         >
+        //           <MessageCircle className="w-4 h-4" />
+        //           <span>Send Message</span>
+        //         </button>
+        //       </div>
+        //     </div>
+        //   ))}
+        // </div>
+
+        // Replace the matches.map section with this improved version
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {matches.map((match, index) => (
+            <motion.div
               key={match.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
               onClick={() => setSelectedMatch(match)}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition cursor-pointer transform hover:-translate-y-1"
+              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all cursor-pointer transform hover:-translate-y-2"
             >
-              <div className="relative">
+              <div className="relative aspect-square">
                 <img
-                  src={match.photos?.[0] || "https://via.placeholder.com/300"}
+                  src={
+                    match.photos?.[0] ||
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop"
+                  }
                   alt={match.username}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop";
+                  }}
                 />
                 {unreadCounts[match.id] > 0 && (
-                  <div className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute top-3 right-3 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-lg"
+                  >
                     {unreadCounts[match.id]}
-                  </div>
+                  </motion.div>
                 )}
-              </div>
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-xl font-semibold text-gray-800">
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                  <h3 className="text-white font-bold text-xl">
                     {match.username}, {match.age}
                   </h3>
-                  <span className="text-green-500 text-sm">● Online</span>
                 </div>
+              </div>
+
+              <div className="p-4">
                 <div className="flex flex-wrap gap-2 mb-3">
-                  {(match.interests || [])
-                    .slice(0, 3)
-                    .map((interest, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-pink-100 text-pink-600 rounded-full text-xs"
-                      >
-                        {interest}
-                      </span>
-                    ))}
+                  {(match.interests || []).slice(0, 3).map((interest, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-pink-100 text-pink-600 rounded-full text-xs"
+                    >
+                      {interest}
+                    </span>
+                  ))}
                 </div>
-                <button
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedMatch(match);
                   }}
-                  className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg hover:from-pink-600 hover:to-purple-600 transition flex items-center justify-center space-x-2"
+                  className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl hover:from-pink-600 hover:to-purple-600 transition flex items-center justify-center space-x-2 font-medium"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Send Message</span>
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}

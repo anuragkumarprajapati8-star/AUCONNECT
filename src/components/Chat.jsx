@@ -415,10 +415,38 @@ export default function Chat({ match, onBack }) {
           <ArrowLeft className="w-5 h-5 text-gray-600" />
         </button>
         <div className="flex items-center">
-          <img
+          {/* <img
             src={match.photos?.[0] || "https://via.placeholder.com/40"}
             alt={match.username}
             className="w-10 h-10 rounded-full object-cover"
+          /> */}
+          // In the chat header, update the image
+          <img
+            src={
+              match.photos?.[0] ||
+              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop"
+            }
+            alt={match.username}
+            className="w-10 h-10 rounded-full object-cover border-2 border-pink-500"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src =
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop";
+            }}
+          />
+          // In the message bubbles, update the avatar
+          <img
+            src={
+              match.photos?.[0] ||
+              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop"
+            }
+            alt={match.username}
+            className="w-6 h-6 rounded-full object-cover float-left mr-2 mb-1 border border-pink-200"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src =
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=30&h=30&fit=crop";
+            }}
           />
           <div className="ml-3">
             <h3 className="font-semibold text-gray-800">

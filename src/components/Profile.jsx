@@ -1403,7 +1403,6 @@ export default function Profile() {
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white rounded-2xl shadow-xl p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Your Profile</h2>
-
         {/* Display Username (read-only) */}
         <div className="mb-6 p-4 bg-gray-50 rounded-lg">
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1416,9 +1415,8 @@ export default function Profile() {
             Username cannot be changed
           </p>
         </div>
-
         {/* Photos Section */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">
             Your Photos
           </h3>
@@ -1456,8 +1454,55 @@ export default function Profile() {
             )}
           </div>
           <p className="text-sm text-gray-500 mt-2">Add up to 6 photos</p>
-        </div>
+        </div> */}
+        // Replace the existing photos grid with this improved version
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            Your Photos
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {(profile.photos || []).map((photo, index) => (
+              <div key={index} className="relative group aspect-square">
+                <img
+                  src={photo}
+                  alt={`Profile ${index + 1}`}
+                  className="w-full h-full object-cover rounded-lg shadow-md"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://via.placeholder.com/300x300?text=Photo+Error";
+                  }}
+                />
+                <button
+                  onClick={() => removePhoto(photo)}
+                  className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all transform hover:scale-110"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity rounded-lg" />
+              </div>
+            ))}
 
+            {(profile.photos || []).length < 6 && (
+              <label className="border-2 border-dashed border-gray-300 rounded-lg aspect-square flex flex-col items-center justify-center cursor-pointer hover:border-pink-500 hover:bg-pink-50 transition-all group">
+                <Camera className="w-8 h-8 text-gray-400 group-hover:text-pink-500 transition-colors" />
+                <span className="text-sm text-gray-500 mt-2 group-hover:text-pink-600">
+                  {uploading ? "Uploading..." : "Add Photo"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={uploadPhoto}
+                  disabled={uploading}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </div>
+          <p className="text-sm text-gray-500 mt-2">
+            Add up to 6 photos. First photo will be your main profile picture.
+          </p>
+        </div>
         {/* Profile Info Form */}
         <form onSubmit={updateProfile} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
